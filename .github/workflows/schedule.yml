@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - name: Update gist
-        uses: matchai/waka-box@master
+        uses: kytta/waka-box@master
         with:
           gist-id: ${{ secrets.GIST_ID }}
           github-token: ${{ secrets.GH_TOKEN }}
