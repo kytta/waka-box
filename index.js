@@ -1,17 +1,22 @@
 import * as core from "@actions/core";
-import { WakaTimeClient, RANGE } from "wakatime-client";
 import { Octokit } from "@octokit/rest";
 
 const gistId = core.getInput("gist-id");
 const githubToken = core.getInput("github-token");
 const wakatimeApiKey = core.getInput("wakatime-api-key");
 
-const wakatime = new WakaTimeClient(wakatimeApiKey);
-
 const octokit = new Octokit({ auth: githubToken });
 
 async function main() {
-  const stats = await wakatime.getMyStats({ range: RANGE.LAST_7_DAYS });
+  const statsResponse = await fetch(
+    new URL("/api/v1/users/current/stats/last_7_days", "https://wakatime.com"),
+    {
+      headers: {
+        Authorization: `Basic ${Buffer.from(wakatimeApiKey).toString("base64")}`,
+      },
+    },
+  );
+  const stats = await statsResponse.json();
   await updateGist(stats);
 }
 
