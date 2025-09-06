@@ -1,13 +1,10 @@
-import "dotenv/config";
-
+import * as core from "@actions/core";
 import { WakaTimeClient, RANGE } from "wakatime-client";
 import { Octokit } from "@octokit/rest";
 
-const {
-  GIST_ID: gistId,
-  GH_TOKEN: githubToken,
-  WAKATIME_API_KEY: wakatimeApiKey,
-} = process.env;
+const gistId = core.getInput("gist-id");
+const githubToken = core.getInput("github-token");
+const wakatimeApiKey = core.getInput("wakatime-api-key");
 
 const wakatime = new WakaTimeClient(wakatimeApiKey);
 

@@ -1,8 +1,21 @@
 name: "waka-box"
 description: "Update a pinned gist to contain WakaTime stats"
+
 branding:
   icon: "clipboard"
   color: "blue"
+
+inputs:
+  gist-id:
+    description: The ID portion from your gist URL
+    required: true
+  github-token:
+    description: GitHub token with 'gist' permission
+    required: true
+  wakatime-api-key:
+    description: The API key for your WakaTime account
+    required: true
+
 runs:
   using: "node24"
   main: "dist/index.js"
