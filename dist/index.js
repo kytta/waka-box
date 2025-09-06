@@ -1,17 +1,15 @@
-"use strict";
-
-var require$$0 = require("fs");
-var require$$1$1 = require("path");
-var require$$2$1 = require("os");
-var require$$3 = require("crypto");
-var require$$1$3 = require("http");
-var require$$2$2 = require("https");
-var require$$0$2 = require("url");
-var require$$3$1 = require("assert");
-var require$$4$1 = require("stream");
-var require$$0$1 = require("tty");
-var require$$1$2 = require("util");
-var require$$8 = require("zlib");
+import require$$0 from "fs";
+import require$$1 from "path";
+import require$$2 from "os";
+import require$$3 from "crypto";
+import require$$1$2 from "http";
+import require$$2$1 from "https";
+import require$$0$2 from "url";
+import require$$3$1 from "assert";
+import require$$4$1 from "stream";
+import require$$0$1 from "tty";
+import require$$1$1 from "util";
+import require$$8 from "zlib";
 
 function getDefaultExportFromCjs(x) {
   return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, "default")
@@ -19,44 +17,9 @@ function getDefaultExportFromCjs(x) {
     : x;
 }
 
-function getAugmentedNamespace(n) {
-  if (Object.prototype.hasOwnProperty.call(n, "__esModule")) return n;
-  var f = n.default;
-  if (typeof f == "function") {
-    var a = function a() {
-      var isInstance = false;
-      try {
-        isInstance = this instanceof a;
-      } catch {}
-      if (isInstance) {
-        return Reflect.construct(f, arguments, this.constructor);
-      }
-      return f.apply(this, arguments);
-    };
-    a.prototype = f.prototype;
-  } else a = {};
-  Object.defineProperty(a, "__esModule", { value: true });
-  Object.keys(n).forEach(function (k) {
-    var d = Object.getOwnPropertyDescriptor(n, k);
-    Object.defineProperty(
-      a,
-      k,
-      d.get
-        ? d
-        : {
-            enumerable: true,
-            get: function () {
-              return n[k];
-            },
-          },
-    );
-  });
-  return a;
-}
+var config = {};
 
-var wakaBoxBFYV4s = {};
-
-var main = { exports: {} };
+var main$1 = { exports: {} };
 
 var version$1 = "17.2.2";
 var require$$4 = {
@@ -66,11 +29,11 @@ var require$$4 = {
 var hasRequiredMain;
 
 function requireMain() {
-  if (hasRequiredMain) return main.exports;
+  if (hasRequiredMain) return main$1.exports;
   hasRequiredMain = 1;
   const fs = require$$0;
-  const path = require$$1$1;
-  const os = require$$2$1;
+  const path = require$$1;
+  const os = require$$2;
   const crypto = require$$3;
   const packageJson = require$$4;
 
@@ -522,17 +485,96 @@ function requireMain() {
     populate,
   };
 
-  main.exports.configDotenv = DotenvModule.configDotenv;
-  main.exports._configVault = DotenvModule._configVault;
-  main.exports._parseVault = DotenvModule._parseVault;
-  main.exports.config = DotenvModule.config;
-  main.exports.decrypt = DotenvModule.decrypt;
-  main.exports.parse = DotenvModule.parse;
-  main.exports.populate = DotenvModule.populate;
+  main$1.exports.configDotenv = DotenvModule.configDotenv;
+  main$1.exports._configVault = DotenvModule._configVault;
+  main$1.exports._parseVault = DotenvModule._parseVault;
+  main$1.exports.config = DotenvModule.config;
+  main$1.exports.decrypt = DotenvModule.decrypt;
+  main$1.exports.parse = DotenvModule.parse;
+  main$1.exports.populate = DotenvModule.populate;
 
-  main.exports = DotenvModule;
-  return main.exports;
+  main$1.exports = DotenvModule;
+  return main$1.exports;
 }
+
+var envOptions;
+var hasRequiredEnvOptions;
+
+function requireEnvOptions() {
+  if (hasRequiredEnvOptions) return envOptions;
+  hasRequiredEnvOptions = 1;
+  // ../config.js accepts options via environment variables
+  const options = {};
+
+  if (process.env.DOTENV_CONFIG_ENCODING != null) {
+    options.encoding = process.env.DOTENV_CONFIG_ENCODING;
+  }
+
+  if (process.env.DOTENV_CONFIG_PATH != null) {
+    options.path = process.env.DOTENV_CONFIG_PATH;
+  }
+
+  if (process.env.DOTENV_CONFIG_QUIET != null) {
+    options.quiet = process.env.DOTENV_CONFIG_QUIET;
+  }
+
+  if (process.env.DOTENV_CONFIG_DEBUG != null) {
+    options.debug = process.env.DOTENV_CONFIG_DEBUG;
+  }
+
+  if (process.env.DOTENV_CONFIG_OVERRIDE != null) {
+    options.override = process.env.DOTENV_CONFIG_OVERRIDE;
+  }
+
+  if (process.env.DOTENV_CONFIG_DOTENV_KEY != null) {
+    options.DOTENV_KEY = process.env.DOTENV_CONFIG_DOTENV_KEY;
+  }
+
+  envOptions = options;
+  return envOptions;
+}
+
+var cliOptions;
+var hasRequiredCliOptions;
+
+function requireCliOptions() {
+  if (hasRequiredCliOptions) return cliOptions;
+  hasRequiredCliOptions = 1;
+  const re =
+    /^dotenv_config_(encoding|path|quiet|debug|override|DOTENV_KEY)=(.+)$/;
+
+  cliOptions = function optionMatcher(args) {
+    const options = args.reduce(function (acc, cur) {
+      const matches = cur.match(re);
+      if (matches) {
+        acc[matches[1]] = matches[2];
+      }
+      return acc;
+    }, {});
+
+    if (!("quiet" in options)) {
+      options.quiet = "true";
+    }
+
+    return options;
+  };
+  return cliOptions;
+}
+
+var hasRequiredConfig;
+
+function requireConfig() {
+  if (hasRequiredConfig) return config;
+  hasRequiredConfig = 1;
+  (function () {
+    requireMain().config(
+      Object.assign({}, requireEnvOptions(), requireCliOptions()(process.argv)),
+    );
+  })();
+  return config;
+}
+
+requireConfig();
 
 var axios$1 = { exports: {} };
 
@@ -2449,7 +2491,7 @@ function requireNode() {
   hasRequiredNode = 1;
   (function (module, exports) {
     var tty = require$$0$1;
-    var util = require$$1$2;
+    var util = require$$1$1;
 
     /**
      * This is the Node.js implementation of `debug()`.
@@ -2665,8 +2707,8 @@ function requireFollowRedirects() {
   if (hasRequiredFollowRedirects) return followRedirects.exports;
   hasRequiredFollowRedirects = 1;
   var url = require$$0$2;
-  var http = require$$1$3;
-  var https = require$$2$2;
+  var http = require$$1$2;
+  var https = require$$2$1;
   var assert = require$$3$1;
   var Writable = require$$4$1.Writable;
   var debug = requireSrc()("follow-redirects");
@@ -3026,8 +3068,8 @@ function requireHttp() {
   var settle = requireSettle();
   var buildFullPath = requireBuildFullPath();
   var buildURL = requireBuildURL();
-  var http = require$$1$3;
-  var https = require$$2$2;
+  var http = require$$1$2;
+  var https = require$$2$1;
   var httpFollow = requireFollowRedirects().http;
   var httpsFollow = requireFollowRedirects().https;
   var url = require$$0$2;
@@ -4555,14 +4597,6 @@ var u,
       r
     );
   })();
-
-var index_esm = /*#__PURE__*/ Object.freeze({
-  __proto__: null,
-  RANGE: i,
-  WakaTimeClient: m,
-});
-
-var require$$1 = /*@__PURE__*/ getAugmentedNamespace(index_esm);
 
 function getUserAgent() {
   if (typeof navigator === "object" && "userAgent" in navigator) {
@@ -8155,109 +8189,83 @@ var Octokit = Octokit$1.plugin(
   userAgent: `octokit-rest.js/${VERSION}`,
 });
 
-var distWeb = /*#__PURE__*/ Object.freeze({
-  __proto__: null,
-  Octokit: Octokit,
-});
+const {
+  GIST_ID: gistId,
+  GH_TOKEN: githubToken,
+  WAKATIME_API_KEY: wakatimeApiKey,
+} = process.env;
 
-var require$$2 = /*@__PURE__*/ getAugmentedNamespace(distWeb);
+const wakatime = new m(wakatimeApiKey);
 
-var hasRequiredWakaBoxBFYV4s;
+const octokit = new Octokit({ auth: `token ${githubToken}` });
 
-function requireWakaBoxBFYV4s() {
-  if (hasRequiredWakaBoxBFYV4s) return wakaBoxBFYV4s;
-  hasRequiredWakaBoxBFYV4s = 1;
-  requireMain().config();
-  const { WakaTimeClient, RANGE } = require$$1;
-  const { Octokit } = require$$2;
-
-  const {
-    GIST_ID: gistId,
-    GH_TOKEN: githubToken,
-    WAKATIME_API_KEY: wakatimeApiKey,
-  } = process.env;
-
-  const wakatime = new WakaTimeClient(wakatimeApiKey);
-
-  const octokit = new Octokit({ auth: `token ${githubToken}` });
-
-  async function main() {
-    const stats = await wakatime.getMyStats({ range: RANGE.LAST_7_DAYS });
-    await updateGist(stats);
-  }
-
-  function trimRightStr(str, len) {
-    // Ellipsis takes 3 positions, so the index of substring is 0 to total length - 3.
-    return str.length > len ? str.substring(0, len - 3) + "..." : str;
-  }
-
-  async function updateGist(stats) {
-    let gist;
-    try {
-      gist = await octokit.gists.get({ gist_id: gistId });
-    } catch (error) {
-      console.error(`Unable to get gist\n${error}`);
-    }
-
-    const lines = [];
-    for (let i = 0; i < Math.min(stats.data.languages.length, 5); i++) {
-      const data = stats.data.languages[i];
-      const { name, percent, text: time } = data;
-
-      const line = [
-        trimRightStr(name, 10).padEnd(10),
-        time.padEnd(14),
-        generateBarChart(percent, 21),
-        String(percent.toFixed(1)).padStart(5) + "%",
-      ];
-
-      lines.push(line.join(" "));
-    }
-
-    if (lines.length == 0) return;
-
-    try {
-      // Get original filename to update that same file
-      const filename = Object.keys(gist.data.files)[0];
-      await octokit.gists.update({
-        gist_id: gistId,
-        files: {
-          [filename]: {
-            filename: `📊 Weekly development breakdown`,
-            content: lines.join("\n"),
-          },
-        },
-      });
-    } catch (error) {
-      console.error(`Unable to update gist\n${error}`);
-    }
-  }
-
-  function generateBarChart(percent, size) {
-    const syms = "░▏▎▍▌▋▊▉█";
-
-    const frac = Math.floor((size * 8 * percent) / 100);
-    const barsFull = Math.floor(frac / 8);
-    if (barsFull >= size) {
-      return syms.substring(8, 9).repeat(size);
-    }
-    const semi = frac % 8;
-
-    return [
-      syms.substring(8, 9).repeat(barsFull),
-      syms.substring(semi, semi + 1),
-    ]
-      .join("")
-      .padEnd(size, syms.substring(0, 1));
-  }
-
-  (async () => {
-    await main();
-  })();
-  return wakaBoxBFYV4s;
+async function main() {
+  const stats = await wakatime.getMyStats({ range: i.LAST_7_DAYS });
+  await updateGist(stats);
 }
 
-var wakaBoxBFYV4sExports = requireWakaBoxBFYV4s();
-var index = /*@__PURE__*/ getDefaultExportFromCjs(wakaBoxBFYV4sExports);
+function trimRightStr(str, len) {
+  // Ellipsis takes 3 positions, so the index of substring is 0 to total length - 3.
+  return str.length > len ? str.substring(0, len - 3) + "..." : str;
+}
 
-module.exports = index;
+async function updateGist(stats) {
+  let gist;
+  try {
+    gist = await octokit.gists.get({ gist_id: gistId });
+  } catch (error) {
+    console.error(`Unable to get gist\n${error}`);
+  }
+
+  const lines = [];
+  for (let i = 0; i < Math.min(stats.data.languages.length, 5); i++) {
+    const data = stats.data.languages[i];
+    const { name, percent, text: time } = data;
+
+    const line = [
+      trimRightStr(name, 10).padEnd(10),
+      time.padEnd(14),
+      generateBarChart(percent, 21),
+      String(percent.toFixed(1)).padStart(5) + "%",
+    ];
+
+    lines.push(line.join(" "));
+  }
+
+  if (lines.length == 0) return;
+
+  try {
+    // Get original filename to update that same file
+    const filename = Object.keys(gist.data.files)[0];
+    await octokit.gists.update({
+      gist_id: gistId,
+      files: {
+        [filename]: {
+          filename: `📊 Weekly development breakdown`,
+          content: lines.join("\n"),
+        },
+      },
+    });
+  } catch (error) {
+    console.error(`Unable to update gist\n${error}`);
+  }
+}
+
+function generateBarChart(percent, size) {
+  const syms = "░▏▎▍▌▋▊▉█";
+
+  const frac = Math.floor((size * 8 * percent) / 100);
+  const barsFull = Math.floor(frac / 8);
+  if (barsFull >= size) {
+    return syms.substring(8, 9).repeat(size);
+  }
+  const semi = frac % 8;
+
+  return [syms.substring(8, 9).repeat(barsFull), syms.substring(semi, semi + 1)]
+    .join("")
+    .padEnd(size, syms.substring(0, 1));
+}
+
+(async () => {
+  await main();
+})();

@@ -4,6 +4,7 @@
   "description": "📊 Update a gist to contain your weekly WakaTime stats",
   "author": "Matan Kushner <hello@matchai.me>",
   "license": "ISC",
+  "type": "module",
   "scripts": {
     "build": "npx rollup --config rollup.config.js",
     "prepare": "husky"

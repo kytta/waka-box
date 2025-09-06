@@ -1,15 +1,15 @@
 // See: https://rollupjs.org/introduction/
 
-const commonjs = require('@rollup/plugin-commonjs')
-const { nodeResolve } = require('@rollup/plugin-node-resolve')
-const json = require('@rollup/plugin-json')
+import commonjs from "@rollup/plugin-commonjs";
+import { nodeResolve } from "@rollup/plugin-node-resolve";
+import json from "@rollup/plugin-json";
 
-module.exports = {
-  input: 'index.js',
+export default {
+  input: "index.js",
   output: {
     esModule: true,
-    file: 'dist/index.js',
-    format: 'cjs'
+    file: "dist/index.js",
+    format: "es",
   },
-  plugins: [json(), commonjs(), nodeResolve({ preferBuiltins: true })]
-}
+  plugins: [json(), commonjs(), nodeResolve({ preferBuiltins: true })],
+};
